@@ -21,6 +21,9 @@ public class ProductDAO extends Product {
         productRepository.deleteById(id);
         return product;
     }
+    public Product findById(UUID id){
+        return productRepository.findById(id).orElse(null);
+    }
     public List<Product> findAll(){
         return productRepository.findAll();
     }
