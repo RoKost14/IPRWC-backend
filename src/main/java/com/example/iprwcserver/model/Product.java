@@ -22,6 +22,8 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.UUID )
     private UUID id;
 
+
+    private String image;
     private String name;
     private String description;
     private float price;

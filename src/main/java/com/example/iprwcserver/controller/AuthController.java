@@ -33,7 +33,6 @@ public ResponseEntity<AuthResponseDTO> login(@RequestBody AuthRequestDTO loginDT
     AuthResponseDTO response = new AuthResponseDTO(token, role, loginDTO.getUsername(), id);
     return new ResponseEntity<>(response, HttpStatus.OK);
 }
-    // In AuthController.java
     @PostMapping(value = "/register")
     public ResponseEntity<RegisterResponseDTO> register(@RequestBody AuthRequestDTO registerDTO) {
         Optional<String> token = authenticationService.register(registerDTO.getUsername(), registerDTO.getPassword());

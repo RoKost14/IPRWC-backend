@@ -1,10 +1,8 @@
 package com.example.iprwcserver.controller;
 
 import com.example.iprwcserver.dao.SizeDAO;
-import com.example.iprwcserver.model.Product;
 import com.example.iprwcserver.model.Size;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +25,6 @@ public class SizeController {
 //        return ResponseEntity.ok(newSize);
 //    }
     @PreAuthorize("hasAuthority('ADMIN')")
-    
     @PostMapping("/product/create/{productId}")
     public ResponseEntity<List<Size>> createSizesOnProduct(@PathVariable UUID productId, @RequestBody List<Size> sizes) {
         List<Size> newSizes = sizeDAO.createSizesOnProduct(productId, sizes);

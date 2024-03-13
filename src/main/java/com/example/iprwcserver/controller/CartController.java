@@ -20,36 +20,51 @@ public class CartController {
 
     private final CartDAO cartDAO;
 
-    @PostMapping(value = "/order")
-    public ResponseEntity<Map<String, String>> placeOrder(@RequestBody List<CartItem> cartItems) {
-        for (CartItem item : cartItems) {
-            System.out.println(item.toString());
-            if (item.getSizeId() == null) {
-                return ResponseEntity.badRequest().body(Map.of("message", "SizeId cannot be null for CartItem: " + item.toString()));
+    @PostMapping(value = "/order/{userId}")
+    public ResponseEntity<CartItem> placeOrder(@PathVariable UUID userId){
+        Cart cart = cartDAO.getCartByUserId(userId);
+        int counter = 0;
+        for (CartItem item : cart.getCartItems()) {
+            if (item.getId()== null) {
+                return ResponseEntity.badRequest().build();
             }
-            if (!cartDAO.isProductInStock(item)) {
-                return ResponseEntity.badRequest().body(Map.of("message", "Product with ID: " + item.getSizeId() + " is out of stock."));
+            if (!cartDAO.isProductInStock(item.getCart().getCartItems().get(counter))) {
+                return ResponseEntity.badRequest().build();
             }
-            cartDAO.updateStock(item);
+//            cartDAO.updateStock(item);
+            counter ++;
         }
-        return new ResponseEntity<>(Map.of("message", "Gaat helemaal goed"), HttpStatus.OK);
+        cartDAO.clearCart(userId);
+        return ResponseEntity.ok().build();
     }
 
-    @PostMapping(value = "/save/{userId}")
-    public ResponseEntity<Cart> saveCart(@PathVariable UUID userId, @RequestBody Cart cart) {
-        Cart savedCart = cartDAO.saveCart(userId, cart);
-        if (savedCart == null) {
+    @PostMapping("/{userId}")
+    public ResponseEntity<Cart> addItemToCart(@PathVariable UUID userId, @RequestBody CartItem cartItem) {
+        Cart cart = cartDAO.getCartByUserId(userId);
+        if (cart == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(savedCart);
+        cartDAO.addItemToCart(userId, cartItem);
+        return ResponseEntity.ok(cart);
     }
 
     @GetMapping("/{userId}")
     public ResponseEntity<Cart> getCartByUserId(@PathVariable UUID userId) {
         Cart cart = cartDAO.getCartByUserId(userId);
+
         if (cart == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(cart);
+    }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Cart> deleteCartByUserId(@PathVariable UUID userId) {
+        Cart cart = cartDAO.getCartByUserId(userId);
+        if (cart == null) {
+            return ResponseEntity.notFound().build();
+        }
+        cartDAO.clearCart(userId);
+        return ResponseEntity.ok().build();
     }
 }

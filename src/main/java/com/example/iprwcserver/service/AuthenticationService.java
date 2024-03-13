@@ -4,6 +4,7 @@ import com.example.iprwcserver.dao.UserDAO;
 import com.example.iprwcserver.model.Cart;
 import com.example.iprwcserver.model.Role;
 import com.example.iprwcserver.model.User;
+import com.example.iprwcserver.repository.CartRepository;
 import com.example.iprwcserver.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,6 +23,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
+    private final CartRepository cartRepository;
 
     public Optional<String> register(String username, String password) {
         Optional<com.example.iprwcserver.model.User> foundUser = userDAO.findByUsername(username);
@@ -30,6 +32,7 @@ public class AuthenticationService {
         }
 
         Cart cart = new Cart();
+        cart = cartRepository.save(cart);
 
         User user = User.builder()
                 .username(username)
@@ -37,7 +40,7 @@ public class AuthenticationService {
                 .role(Role.CUSTOMER)
                 .cart(cart)
                 .build();
-
+        cart.setUser(user);
         userDAO.save(user);
         String token = jwtService.generateToken(Map.of("role", user.getRole()), user.getId() );
         return Optional.of(token);

@@ -1,6 +1,7 @@
 // CartItem.java
 package com.example.iprwcserver.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,11 +24,16 @@ public class CartItem {
 
     @ManyToOne
     @JoinColumn(name = "cart_id")
+    @JsonBackReference
     private Cart cart;
 
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 
-    @Column(name = "size_id")
-    private UUID sizeId;
+    @ManyToOne
+    @JoinColumn(name = "size_id")
+    private Size size;
 
     private int quantity;
 }
