@@ -22,17 +22,18 @@ public class AuthController {
     private final UserRepository userRepository;
 
     @PostMapping(value = "/login")
-public ResponseEntity<AuthResponseDTO> login(@RequestBody AuthRequestDTO loginDTO) {
-    String token = authenticationService.login(loginDTO.getUsername(), loginDTO.getPassword());
-    String role = authenticationService.getRoleByUsername(loginDTO.getUsername()).name();
-    Optional<User> user = userRepository.findByUsername(loginDTO.getUsername());
-    if (user.isEmpty()) {
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<AuthResponseDTO> login(@RequestBody AuthRequestDTO loginDTO) {
+        String token = authenticationService.login(loginDTO.getUsername(), loginDTO.getPassword());
+        String role = authenticationService.getRoleByUsername(loginDTO.getUsername()).name();
+        Optional<User> user = userRepository.findByUsername(loginDTO.getUsername());
+        if (user.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        UUID id = user.get().getId();
+        AuthResponseDTO response = new AuthResponseDTO(token, role, loginDTO.getUsername(), id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    UUID id = user.get().getId();
-    AuthResponseDTO response = new AuthResponseDTO(token, role, loginDTO.getUsername(), id);
-    return new ResponseEntity<>(response, HttpStatus.OK);
-}
+
     @PostMapping(value = "/register")
     public ResponseEntity<RegisterResponseDTO> register(@RequestBody AuthRequestDTO registerDTO) {
         Optional<String> token = authenticationService.register(registerDTO.getUsername(), registerDTO.getPassword());
