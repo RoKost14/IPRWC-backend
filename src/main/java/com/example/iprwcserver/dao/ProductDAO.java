@@ -21,6 +21,18 @@ public class ProductDAO extends Product {
         productRepository.deleteById(id);
         return product;
     }
+   public Product updateProductById(UUID id, Product product){
+        Product existingProduct = productRepository.findById(id).orElse(null);
+        if (existingProduct == null) {
+            return null;
+        }
+        existingProduct.setName(product.getName());
+        existingProduct.setDescription(product.getDescription());
+        existingProduct.setPrice(product.getPrice());
+        existingProduct.setImage(product.getImage());
+        productRepository.save(existingProduct);
+        return existingProduct;
+    }
     public Product findById(UUID id){
         return productRepository.findById(id).orElse(null);
     }

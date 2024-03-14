@@ -22,6 +22,24 @@ public class ProductController {
         Product createdProduct = productDAO.create(product);
         return new ResponseEntity<>(createdProduct.getId(), HttpStatus.CREATED);
     }
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PutMapping(value = "/update/{id}")
+    public ResponseEntity<Product> updateProductById(@PathVariable("id") UUID id, @RequestBody Product product) {
+        Product updatedProduct = productDAO.updateProductById(id, product);
+        if (updatedProduct == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedProduct);
+
+    }
+    @DeleteMapping(value = "/delete/{id}")
+    public ResponseEntity<Product> deleteProductById(@PathVariable("id") UUID id) {
+        Product deletedProduct = productDAO.deleteById(id);
+        if (deletedProduct == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(deletedProduct);
+    }
 
     @GetMapping
     public ResponseEntity<Iterable<Product>> getAllProducts() {

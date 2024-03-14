@@ -23,7 +23,6 @@ public class SizeDAO {
         }
         Size newSize = new Size();
         newSize.setSize(size);
-        newSize.setStock(stock);
         newSize.setProduct(product);
         product.getSizes().add(newSize);
         productRepository.save(product);
@@ -45,7 +44,6 @@ public class SizeDAO {
                 return null;
             }
             existingSize.setSize(size.getSize());
-            existingSize.setStock(size.getStock());
             sizeRepository.save(existingSize);
         }
 
@@ -67,18 +65,7 @@ public class SizeDAO {
 
         return sizes;
     }
-
-
-
-    public Size updateStock(UUID id, int newStock) {
-        Size size = sizeRepository.findById(id).orElse(null);
-        if (size == null) {
-            return null;
-        }
-        size.setStock(newStock);
-        return sizeRepository.save(size);
-    }
-
+    
     public Size getSizesFromProduct(int size, UUID productId){
         return sizeRepository.findBySizeAndProductId(size, productId);
     }

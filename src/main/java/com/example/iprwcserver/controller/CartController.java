@@ -28,10 +28,6 @@ public class CartController {
             if (item.getId()== null) {
                 return ResponseEntity.badRequest().build();
             }
-            if (!cartDAO.isProductInStock(item.getCart().getCartItems().get(counter))) {
-                return ResponseEntity.badRequest().build();
-            }
-//            cartDAO.updateStock(item);
             counter ++;
         }
         cartDAO.clearCart(userId);

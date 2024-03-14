@@ -20,7 +20,6 @@ public class Size {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private int size;
-    private int stock;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     @JsonBackReference
