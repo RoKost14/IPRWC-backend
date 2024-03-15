@@ -32,6 +32,7 @@ public class ProductController {
         return ResponseEntity.ok(updatedProduct);
 
     }
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<Product> deleteProductById(@PathVariable("id") UUID id) {
         Product deletedProduct = productDAO.deleteById(id);

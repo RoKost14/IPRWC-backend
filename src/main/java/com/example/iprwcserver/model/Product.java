@@ -25,6 +25,7 @@ public class Product {
 
     private String image;
     private String name;
+    @Column(length = 1000)
     private String description;
     private float price;
 

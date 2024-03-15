@@ -15,15 +15,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class SizeController {
     private final SizeDAO sizeDAO;
-
-    //    @PostMapping("/product/create/{productId}")
-//    public ResponseEntity<Size> createSizeOnProduct(@PathVariable UUID productId, @RequestBody Size size) {
-//        Size newSize = sizeDAO.createSizeOnProduct(productId, size.getSize(), size.getStock());
-//        if (newSize == null) {
-//            return ResponseEntity.notFound().build();
-//        }
-//        return ResponseEntity.ok(newSize);
-//    }
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/product/create/{productId}")
     public ResponseEntity<List<Size>> createSizesOnProduct(@PathVariable UUID productId, @RequestBody List<Size> sizes) {

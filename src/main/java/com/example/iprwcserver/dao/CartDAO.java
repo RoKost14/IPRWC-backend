@@ -20,15 +20,6 @@ public class CartDAO {
     private final CartItemRepository cartItemRepository;
     private final UserRepository userRepository;
 
-//    public void updateStock(CartItem cartItem) {
-//        Size size = sizeDAO.findById(cartItem.getSize().getId());
-//        if (size == null) {
-//            throw new IllegalArgumentException("No Size found with id: " + cartItem.getSize().getId());
-//        }
-//        size.setStock(size.getStock() - cartItem.getQuantity());
-//        sizeDAO.save(size);
-//    }
-
     public Cart getCartByUserId(UUID userId) {
         return cartRepository.findCartByUserId(userId).orElse(null);
 
